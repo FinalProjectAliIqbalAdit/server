@@ -62,7 +62,7 @@ module.exports = {
 			lat : req.body.lat,
 			lng : req.body.lng,
 			startAt : req.body.startAt,
-			participants : [],
+			participants : [req.user._id]
         })
         .then((meeting) => {
             res.status(201).json(meeting);

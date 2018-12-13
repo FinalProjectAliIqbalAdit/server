@@ -40,6 +40,7 @@ module.exports = {
             });
 
     },
+
     getUserMeeting(req,res){
       const id = req.params.id
       UserMeetingModel.find({meeting: id}).populate('participant')
@@ -53,6 +54,7 @@ module.exports = {
           });
       });
     },
+
     create(req, res) {
 
         MeetingModel.create({
@@ -63,6 +65,19 @@ module.exports = {
 			lng : req.body.lng,
 			startAt : req.body.startAt,
 			participants : [req.user._id]
+        })
+        .then((meeting) => {
+            UserModel.findByIdAndUpdate(req.user._id, { 
+                $push: { 
+                    userMeetings: meeting._id
+                } 
+            })
+
+            return UserMeetingModel.create({
+                meeting: meeting._id,
+                participant: req.user._id,
+                departTime: new Date() // 1jam sblum meeting startAt
+            })
         })
         .then((meeting) => {
             res.status(201).json(meeting);
@@ -169,13 +184,13 @@ module.exports = {
                         participants: user._id
                     } 
                 })
-              })
+            })
             .then((meeting)=>{
-              return UserMeetingModel.create({
-                meeting: meetingId,
-                participant: userId,
-                departTime: new Date()//1jam sblum meeting startAt
-              })
+                return UserMeetingModel.create({
+                    meeting: meetingId,
+                    participant: userId,
+                    departTime: new Date()//1jam sblum meeting startAt
+                })
             })
             .then((meeting) => {
                 res.json({

@@ -3,16 +3,27 @@ var express = require('express');
 var path = require('path');
 var cookieParser = require('cookie-parser');
 var logger = require('morgan');
+require('dotenv').config()
 
 var indexRouter = require('./routes/index');
-var usersRouter = require('./routes/users');
-
+const mongoose = require('mongoose');
 var app = express();
-
+var cors = require('cors')
 // view engine setup
+
+
+if(process.env.NODE_ENV == 'test') {
+    mongoose.connect('mongodb://127.0.0.1:27017/finalProjectTest',{ useNewUrlParser: true, useCreateIndex: true, useFindAndModify : false })    
+} else {
+  mongoose.connect('mongodb://127.0.0.1:27017/finalProject',{ useNewUrlParser: true, useCreateIndex: true, useFindAndModify : false })
+  app.use(logger('dev'));
+}
+mongoose.connection.on("error", console.error.bind(console, "MongoDB connection error"))
+mongoose.connection.once("open", ()=> {console.log("MongoDB Connected!")})
+
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'jade');
-
+app.use(cors())
 app.use(logger('dev'));
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
@@ -20,7 +31,6 @@ app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
 app.use('/', indexRouter);
-app.use('/users', usersRouter);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {

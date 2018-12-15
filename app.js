@@ -19,8 +19,8 @@ onGoing();
 if(process.env.NODE_ENV == 'test') {
     mongoose.connect('mongodb://127.0.0.1:27017/finalProjectTest',{ useNewUrlParser: true, useCreateIndex: true, useFindAndModify : false })    
 } else {
-  // mongoose.connect('mongodb://firemeet1:firemeet1@ds247759.mlab.com:47759/firemeet',{ useNewUrlParser: true, useCreateIndex: true, useFindAndModify : false })
-  mongoose.connect('mongodb://127.0.0.1:27017/finalProject',{ useNewUrlParser: true, useCreateIndex: true, useFindAndModify : false })    
+  mongoose.connect('mongodb://firemeet1:firemeet1@ds247759.mlab.com:47759/firemeet',{ useNewUrlParser: true, useCreateIndex: true, useFindAndModify : false })
+  // mongoose.connect('mongodb://127.0.0.1:27017/finalProject',{ useNewUrlParser: true, useCreateIndex: true, useFindAndModify : false })    
 
   app.use(logger('dev'));
 }

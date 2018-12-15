@@ -107,15 +107,11 @@ const UserController = {
                         name : user.name,
                         email : user.email
                     })
-
+                    user.password = undefined
                     res.status(200).json({
                         token: token,
                         message: "Login Success",
-                        user : {
-                            _id : user._id,
-                            name : user.name,
-                            email : user.email,
-                        }
+                        user
                     })
                 } else {
                     res.status(400).json({

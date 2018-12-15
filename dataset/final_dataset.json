@@ -1,0 +1,428 @@
+[
+   {
+      "duration": 66,
+      "distance": 14,
+      "score": 100,
+      "traffic_model": "best_guess"
+   },
+   {
+      "duration": 30,
+      "distance": 12,
+      "score": 90,
+      "traffic_model": "best_guess"
+    },
+    {
+      "duration": 45,
+      "distance": 14,
+      "score": 81,
+      "traffic_model": "best_guess"
+    },
+    {
+      "duration": 54,
+      "distance": 23,
+      "score": 81,
+      "traffic_model": "best_guess"
+    },
+    {
+      "duration": 56,
+      "distance": 24,
+      "score": 41,
+      "traffic_model": "pessimistic"
+    },
+    {
+      "duration": 77,
+      "distance": 25,
+      "score": 21,
+      "traffic_model": "pessimistic"
+    },
+    {
+      "duration": 21,
+      "distance": 6.5,
+      "score": 8,
+      "traffic_model": "pessimistic"
+    },
+    {
+      "duration": 21,
+      "distance": 6.5,
+      "score": 8,
+      "traffic_model": "pessimistic"
+    },
+    {
+      "duration": 21,
+      "distance": 6.5,
+      "score": 10,
+      "traffic_model": "pessimistic"
+    },
+    {
+      "duration": 21,
+      "distance": 6.5,
+      "score": 80,
+      "traffic_model": "best_guess"
+    },
+    {
+      "duration": 21,
+      "distance": 6.5,
+      "score": 100,
+      "traffic_model": "best_guess"
+    },
+    {
+      "duration": 21,
+      "distance": 6,
+      "score": 49,
+      "traffic_model": "pessimistic"
+    },
+    {
+      "duration": 20,
+      "distance": 5.9,
+      "score": 50,
+      "traffic_model": "pessimistic"
+    },
+    {
+      "duration": 31,
+      "distance": 7,
+      "score": 51,
+      "traffic_model": "pessimistic"
+    },
+    {
+      "duration": 16,
+      "distance": 3.6,
+      "score": 52,
+      "traffic_model": "best_guess"
+    },
+    {
+      "duration": 17,
+      "distance": 3.6,
+      "score": 59,
+      "traffic_model": "best_guess"
+    },
+    {
+      "duration": 61,
+      "distance": 12,
+      "score": 14,
+      "traffic_model": "pessimistic"
+    },
+    {
+      "duration": 19,
+      "distance": 4.1,
+      "score": 19,
+      "traffic_model": "pessimistic"
+    },
+    {
+      "duration": 17,
+      "distance": 4,
+      "score": 62,
+      "traffic_model": "best_guess"
+    },
+    {
+      "duration": 20,
+      "distance": 5.6,
+      "score": 65,
+      "traffic_model": "best_guess"
+    },
+    {
+      "duration": 17,
+      "distance": 3.6,
+      "score": 20,
+      "traffic_model": "pessimistic"
+    },
+    {
+      "duration": 17,
+      "distance": 3.6,
+      "score": 18,
+      "traffic_model": "pessimistic"
+    },
+    {
+      "duration": 10,
+      "distance": 2.6,
+      "score": 16,
+      "traffic_model": "pessimistic"
+    },
+    {
+      "duration": 9,
+      "distance": 2.4,
+      "score": 40,
+      "traffic_model": "pessimistic"
+    },
+    {
+      "duration": 10,
+      "distance": 3,
+      "score": 26,
+      "traffic_model": "pessimistic"
+    },//
+    {
+      "duration": 11,
+      "distance": 3.7,
+      "score": 13,
+      "traffic_model": "pessimistic"
+    },
+    {
+      "duration": 19,
+      "distance": 3.8,
+      "score": 60,
+      "traffic_model": "best_guess"
+    },
+    {
+      "duration": 16,
+      "distance": 3.6,
+      "score": 15,
+      "traffic_model": "pessimistic"
+    },
+    {
+      "duration": 17,
+      "distance": 3.6,
+      "score": 14,
+      "traffic_model": "pessimistic"
+    },
+    {
+      "duration": 19,
+      "distance": 3.8,
+      "score": 18,
+      "traffic_model": "pessimistic"
+    },
+    {
+      "duration": 22,
+      "distance": 5.6,
+      "score": 32,
+      "traffic_model": "pessimistic"
+    },
+    {
+      "duration": 23,
+      "distance": 5.7,
+      "score": 39,
+      "traffic_model": "pessimistic"
+    },
+    {
+      "duration": 29,
+      "distance": 6,
+      "score": 40,
+      "traffic_model": "pessimistic"
+    },
+    {
+      "duration": 30,
+      "distance": 6.2,
+      "score": 42,
+      "traffic_model": "pessimistic"
+    },
+    {
+      "duration": 31,
+      "distance": 6.3,
+      "score": 35,
+      "traffic_model": "pessimistic"
+    },
+    {
+      "duration": 31,
+      "distance": 6.3,
+      "score": 71,
+      "traffic_model": "best_guess"
+    },
+    {
+      "duration": 32,
+      "distance": 6.4,
+      "score": 69,
+      "traffic_model": "best_guess"
+    },
+    {
+      "duration": 32,
+      "distance": 6.4,
+      "score": 85,
+      "traffic_model": "best_guess"
+    },
+    {
+      "duration": 21,
+      "distance": 5.5,
+      "score": 80,
+      "traffic_model": "best_guess"
+    },
+    {
+      "duration": 30,
+      "distance": 6,
+      "score": 79,
+      "traffic_model": "best_guess"
+    },
+    {
+      "duration": 29,
+      "distance": 5.9,
+      "score": 86,
+      "traffic_model": "best_guess"
+    },
+    {
+      "duration": 31,
+      "distance": 6,
+      "score": 89,
+      "traffic_model": "best_guess"
+    },
+    {
+      "duration": 32,
+      "distance": 6.1,
+      "score": 90,
+      "traffic_model": "best_guess"
+    },
+    {
+      "duration": 20,
+      "distance": 4.9,
+      "score": 81,
+      "traffic_model": "best_guess"
+    },
+    {
+      "duration": 24,
+      "distance": 5.2,
+      "score": 71,
+      "traffic_model": "best_guess"
+    },
+    {
+      "duration": 18,
+      "distance": 4,
+      "score": 99,
+      "traffic_model": "best_guess"
+    },
+    {
+      "duration": 16,
+      "distance": 3.5,
+      "score": 75,
+      "traffic_model": "best_guess"
+    },
+    {
+      "duration": 17,
+      "distance": 3.6,
+      "score": 73,
+      "traffic_model": "best_guess"
+    },
+    {
+      "duration": 17,
+      "distance": 3.6,
+      "score": 76,
+      "traffic_model": "best_guess"
+    },
+    {
+      "duration": 34,
+      "distance": 6,
+      "score": 79,
+      "traffic_model": "best_guess"
+    },
+    {
+      "duration": 60,
+      "distance": 44,
+      "score": 52,
+      "traffic_model": "pessimistic"
+    },
+    {
+      "duration": 60,
+      "distance": 44,
+      "score": 100,
+      "traffic_model": "best_guess"
+    },
+    {
+      "duration": 36,
+      "distance": 23,
+      "score": 49,
+      "traffic_model": "pessimistic"
+    },
+    {
+      "duration": 40,
+      "distance": 24,
+      "score": 66,
+      "traffic_model": "best_guess"
+    },
+    {
+      "duration": 40,
+      "distance": 24,
+      "score": 39,
+      "traffic_model": "pessimistic"
+    },
+    {
+      "duration": 28,
+      "distance": 12,
+      "score": 77,
+      "traffic_model": "best_guess"
+    },
+    {
+      "duration": 28,
+      "distance": 12,
+      "score": 72,
+      "traffic_model": "best_guess"
+    },
+    {
+      "duration": 29,
+      "distance": 12,
+      "score": 67,
+      "traffic_model": "best_guess"
+    },
+    {
+      "duration": 28,
+      "distance": 12,
+      "score": 5,
+      "traffic_model": "pessimistic"
+    },
+    {
+      "duration": 30,
+      "distance": 15,
+      "score": 17,
+      "traffic_model": "pessimistic"
+    },
+    {
+      "duration": 32,
+      "distance": 18,
+      "score": 22,
+      "traffic_model": "pessimistic"
+    },
+    {
+      "duration": 29,
+      "distance": 17,
+      "score": 31,
+      "traffic_model": "pessimistic"
+    },
+    {
+      "duration": 30,
+      "distance": 19,
+      "score": 33,
+      "traffic_model": "pessimistic"
+    },
+    {
+      "duration": 17,
+      "distance": 6.9,
+      "score": 48,
+      "traffic_model": "pessimistic"
+    },
+    {
+      "duration": 23,
+      "distance": 13,
+      "score": 62,
+      "traffic_model": "best_guess"
+    },
+    {
+      "duration": 23,
+      "distance": 13,
+      "score": 41,
+      "traffic_model": "pessimistic"
+    },
+    {
+      "duration": 35,
+      "distance": 24,
+      "score": 54,
+      "traffic_model": "pessimistic"
+    },
+    {
+      "duration": 37,
+      "distance": 26,
+      "score": 57,
+      "traffic_model": "pessimistic"
+    },
+    {
+      "duration": 37,
+      "distance": 26,
+      "score": 60,
+      "traffic_model": "best_guess"
+    },
+    {
+      "duration": 36,
+      "distance": 26,
+      "score": 57,
+      "traffic_model": "best_guess"
+    },
+    {
+      "duration": 34,
+      "distance": 24,
+      "score": 57,
+      "traffic_model": "pessimistic"
+    }
+]

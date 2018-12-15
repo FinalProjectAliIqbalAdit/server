@@ -1,8 +1,8 @@
 const MeetingModel = require('../models/MeetingModel.js');
 const UserModel = require('../models/UserModel.js');
 const UserMeetingModel = require('../models/UserMeetingModel.js')
+const { setDepartTime,substractMinute } = require('../helpers/helpers')
 module.exports = {
-
     list(req, res) {
 
         MeetingModel.find()
@@ -179,18 +179,31 @@ module.exports = {
                 return user.save()
             })
             .then((user) => {
-                return MeetingModel.findByIdAndUpdate(meetingId, { 
-                    $push: { 
-                        participants: user._id
-                    } 
-                })
+              
+              return MeetingModel.findByIdAndUpdate(meetingId, { 
+                  $push: { 
+                      participants: user._id
+                  } 
+              })
             })
             .then((meeting)=>{
-                return UserMeetingModel.create({
-                    meeting: meetingId,
-                    participant: userId,
-                    departTime: new Date()//1jam sblum meeting startAt
+                UserModel.findById(userId, async (err,user)=>{
+                  const { msg } = await setDepartTime(meeting,user)
+                  if (msg === 'success' ) {
+                    let { output } = await setDepartTime(meeting,user)
+                    console.log('process ini',output);
+                    let departTimeML=substractMinute(String(meeting.startAt),Number(output))
+                    return UserMeetingModel.create({
+                        meeting: meetingId,
+                        participant: userId,
+                        departTime: new Date(String(departTimeML))//1jam sblum meeting startAt
+                    })
+                  }else{
+                    throw err
+                  }
+                  
                 })
+                
             })
             .then((meeting) => {
                 res.json({

@@ -7,6 +7,8 @@
     "dev": "nodemon ./bin/www"
   },
   "dependencies": {
+    "@tensorflow/tfjs": "^0.14.1",
+    "@tensorflow/tfjs-node": "^0.1.21",
     "axios": "^0.18.0",
     "bcryptjs": "^2.4.3",
     "cookie-parser": "~1.4.3",

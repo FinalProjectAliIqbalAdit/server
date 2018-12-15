@@ -1,6 +1,7 @@
 const UserModel = require('../models/UserModel.js');
 const helpers = require('../helpers/helpers.js');
 
+
 const UserController = {
 
     verify(req, res) {
@@ -170,7 +171,7 @@ const UserController = {
             return res.status(204).json();
         });
         
-    },
+    }
 
 
 };

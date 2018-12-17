@@ -67,20 +67,23 @@ module.exports = {
 			participants : [req.user._id]
         })
         .then((meeting) => {
-            UserModel.findByIdAndUpdate(req.user._id, { 
-                $push: { 
-                    userMeetings: meeting._id
-                } 
-            })
-
             return UserMeetingModel.create({
                 meeting: meeting._id,
                 participant: req.user._id,
                 departTime: new Date() // 1jam sblum meeting startAt
             })
         })
-        .then((meeting) => {
-            res.status(201).json(meeting);
+        .then((userMeeting) => {
+            return UserModel.findByIdAndUpdate(req.user._id, { 
+                $push: { 
+                    userMeetings: userMeeting.meeting
+                } 
+            })
+        })
+        .then((user) => {
+            res.status(201).json({
+                message : 'Create Meeting Succes'
+            });
         }).catch((err) => {
             res.status(500).json({
                 message: 'Error when creating Meeting',

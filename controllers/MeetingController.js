@@ -10,7 +10,7 @@ module.exports = {
             .sort('-startAt')
             .exec()
             .then((result) => {
-                res.json(result);
+                res.status(200).json(result);
             }).catch((err) => {
                 res.status(500).json({
                     message: 'Error when getting Meetings.',
@@ -31,7 +31,7 @@ module.exports = {
                         message: 'No such Meeting'
                     });
                 }
-                return res.json(meeting);
+                return res.status(200).json(meeting);
             }).catch((err) => {
                 res.status(500).json({
                     message: 'Error when getting Meeting.',
@@ -123,7 +123,7 @@ module.exports = {
                     });
                 }
 
-                return res.json(meeting);
+                return res.status(200).json(meeting);
             });
         })
         .populate('participants host', '_id avatar name email lat lng')
@@ -145,6 +145,27 @@ module.exports = {
 
     },
 
+    getAllUsersToInvite(req, res) {
+
+        // Find users who doesn't have an invitation from this meeting or currently is not a participant of this meeting
+        UserModel.find({
+            meetingInvitation: {
+                $ne: req.params.meetingId
+            }, 
+            userMeetings: {
+                $ne: req.params.meetingId
+            }
+        })
+            .then((users) => {
+                res.status(200).json(users);
+            })
+            .catch((err) => {
+                console.log('Get Users To Invite Error: ', err);
+                res.status(500).json(err);
+            });
+
+    },
+
     inviteUserToMeeting(req, res) {
 
         const meetingId = req.params.id
@@ -155,7 +176,7 @@ module.exports = {
                 return user.save()
             })
             .then((user) => {
-                res.json({
+                res.status(200).json({
                     message : 'Meeting invitation send to '+ user.name
                 })
             }).catch((err) => {
@@ -206,7 +227,7 @@ module.exports = {
                 
             })
             .then((meeting) => {
-                res.json({
+                res.status(200).json({
                     message : 'Assign meeting succes',
                     data: meeting
                 })   
@@ -217,8 +238,27 @@ module.exports = {
                     error: err
                 });
             });    
-          }
+          },
 
+    refuseInvitation(req, res) {
 
-    
+        const meetingId = req.params.id
+
+        UserModel.findByIdAndUpdate(req.user._id, {
+            $pull: {
+                meetingInvitation: meetingId
+            }
+        })
+            .then((result) => {
+                res.status(200).json({
+                    message: `Successfully refused the invitation`
+                });
+            })
+            .catch((err) => {
+                console.log('Refuse Meeting Invitation Error: ', err);
+                res.status(500).json(err);
+            });
+            
+    }
+
 };

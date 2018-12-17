@@ -5,6 +5,8 @@ const auth = require('../middlewares/auth.js')
 
 router.get('/invite/:id/:userId', auth.isLogin, MeetingController.inviteUserToMeeting);
 router.get('/accept/:id', auth.isLogin, MeetingController.asignUserToMeeting);
+router.get('/refuse/:id', auth.isLogin, MeetingController.refuseInvitation);
+router.get('/userstoinvite/:meetingId', auth.isLogin, MeetingController.getAllUsersToInvite);
 router.get('/', MeetingController.list);
 router.get('/:id', MeetingController.show);
 router.get('/users/:id', MeetingController.getUserMeeting);

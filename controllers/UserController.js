@@ -28,7 +28,7 @@ const UserController = {
             .populate('meetingInvitation userMeetings', '_id status title startAt')
             .exec()
             .then((users) => {
-                res.json(users)
+                res.status(200).json(users)
             }).catch((err) => {
                 res.status(500).json({
                     message: 'Error when getting Users',
@@ -51,7 +51,7 @@ const UserController = {
                         message: 'No such User'
                     });
                 }
-                return res.json(user);
+                return res.status(200).json(user);
             }).catch((err) => {
                 res.status(500).json({
                     message: 'Error when getting User.',
@@ -141,7 +141,7 @@ const UserController = {
         
         UserModel.findByIdAndUpdate(id, updateUser, { new: true })
             .then((result) => {
-                res.json({
+                res.status(200).json({
                     message : `update user success`,
                     data : result
                 })

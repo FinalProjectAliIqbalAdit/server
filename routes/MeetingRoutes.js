@@ -3,7 +3,7 @@ const router = express.Router();
 const MeetingController = require('../controllers/MeetingController.js');
 const auth = require('../middlewares/auth.js')
 
-router.put('/feedback',auth.isLogin, auth.isMeetingHost,MeetingController.feedback)
+router.put('/feedback/:id',auth.isLogin, auth.isMeetingHost,MeetingController.feedback)
 router.get('/invite/:id/:userId', auth.isLogin, MeetingController.inviteUserToMeeting);
 router.get('/accept/:id', auth.isLogin, MeetingController.asignUserToMeeting);
 router.get('/refuse/:id', auth.isLogin, MeetingController.refuseInvitation);

@@ -85,11 +85,6 @@ module.exports = {
               output: module.exports.getMinute(data.rows[0].elements[0].duration_in_traffic.text)
             })
           })
-          .catch((err)=>{
-            reject({
-              msg: err
-            })
-          })
       })
     }
     

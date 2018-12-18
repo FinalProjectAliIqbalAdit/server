@@ -27,25 +27,19 @@ const UserController = {
     },
 
     findOneById(req, res) {
-
-        
-        var id = req.params.id
+        let id = req.params.id
         UserModel.findById(id)
             .populate('meetingInvitation userMeetings')
-            .populate({
-              path: 'userMeetings',
-              populate: {path: 'host', select: '_id name email'}
-            })
             .exec()
-              .then((user) => {
+            .then((user) => {
                 return res.status(200).json(user);
-              })
-              .catch((err) => {
+            })
+            .catch((err) => {
                 res.status(500).json({
                     message: 'you\'re not auhtorized for doing this actions',
                     error: err
                 });
-              });
+            });
     },
 
     register(req, res) {

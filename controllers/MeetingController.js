@@ -3,23 +3,24 @@ const UserModel = require('../models/UserModel.js');
 const UserMeetingModel = require('../models/UserMeetingModel.js')
 const { setDepartTime,substractMinute } = require('../helpers/helpers')
 module.exports = {
-    feedback(req,res){
-      UserModel.findOneAndUpdate({ _id : req.body.participantId  },{
-        score: req.body.feedbackScore
-      },{})
-        .then(()=>{
-          res.status(200).json({
-            msg: `Score updated`
-          })
-        })
-        .catch((err)=>{
-          res.status(500).json({
-            msg: err
-          })
-        })
-    },
-    list(req, res) {
 
+    feedback(req,res){
+        UserModel.findOneAndUpdate({ _id : req.body.participantId  },{
+            score: req.body.feedbackScore
+        },{})
+            .then(()=>{
+                res.status(200).json({
+                    msg: `Score updated`
+                })
+            })
+            .catch((err)=>{
+                res.status(500).json({
+                    msg: err
+                })
+            })
+    },
+
+    list(req, res) {
         MeetingModel.find()
             .populate('participants host', '_id avatar name email lat lng')
             .sort('-startAt')
@@ -32,7 +33,6 @@ module.exports = {
                     error: err
                 });
             });
-
     },
 
     show(req, res) {
@@ -57,17 +57,23 @@ module.exports = {
     },
 
     getUserMeeting(req,res){
-      const id = req.params.id
-      UserMeetingModel.find({meeting: id}).populate('participant')
-      .then((usermeeting)=>{
-        return res.status(200).json(usermeeting)
-      })
-      .catch((err) => {
-          res.status(500).json({
-              message: 'Error when getting UserMeeting.',
-              error: err
-          });
-      });
+        const id = req.params.id
+        UserMeetingModel.find({meeting: id})
+            .populate('participant')
+            .populate({
+                path: 'meeting',
+                populate: {path: 'host', select: '_id name email'}
+            })
+            .exec()
+            .then((usermeeting)=>{
+                return res.status(200).json(usermeeting)
+            })
+            .catch((err) => {
+                res.status(500).json({
+                    message: 'Error when getting UserMeeting.',
+                    error: err
+                });
+            });
     },
 
     create(req, res) {

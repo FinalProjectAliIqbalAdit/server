@@ -2,6 +2,10 @@ const mongoose = require('mongoose');
 const Schema   = mongoose.Schema;
 
 const MeetingSchema = new Schema({
+  place: {
+		type: String,
+		default: ''
+	},
 	host : {
 		type: Schema.Types.ObjectId,
 		ref: 'User'

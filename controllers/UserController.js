@@ -30,6 +30,10 @@ const UserController = {
         let id = req.params.id
         UserModel.findById(id)
             .populate('meetingInvitation userMeetings')
+            .populate({
+                path: 'userMeetings',
+                populate: {path: 'host', select: '_id name email'}
+            })
             .exec()
             .then((user) => {
                 return res.status(200).json(user);

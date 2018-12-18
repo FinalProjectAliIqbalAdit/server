@@ -13,5 +13,5 @@ router.get('/users/:id', MeetingController.getUserMeeting);
 router.post('/', auth.isLogin, MeetingController.create);
 router.put('/:id', auth.isLogin, auth.isMeetingHost,  MeetingController.update);
 router.delete('/:id', auth.isLogin, auth.isMeetingHost, MeetingController.remove);
-
+router.put('/feedback',MeetingController.feedback)
 module.exports = router;

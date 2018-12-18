@@ -35,9 +35,9 @@ const UserSchema = new Schema({
 		type: Number,
 		default : 100
     },
-    notifications: [{
-        type: String
-    }],
+  notifications: [{
+      type: String
+  }],
 	userMeetings : [{
 		type: Schema.Types.ObjectId,
 		ref: 'Meeting'

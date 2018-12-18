@@ -66,8 +66,8 @@ describe('User Register and Login', () => {
                 .send(req.body)
                 .end((err, res) => {
                     expect(res).to.have.status(400);
-                    expect(res.body).to.have.property("err");
-                    expect(res.body.err).to.have.property("message").eql('User validation failed: name: Name Required');
+                    expect(res.body).to.have.property("errors");
+                    expect(res.body.errors.name).to.have.property("message").eql('Name Required');
                     done()  
                 })
         });
@@ -79,21 +79,21 @@ describe('User Register and Login', () => {
                 .send(req.body)
                 .end((err, res) => {
                     expect(res).to.have.status(400);
-                    expect(res.body).to.have.property("err");
-                    expect(res.body.err).to.have.property("message")
+                    expect(res.body).to.have.property("errors");
+                    expect(res.body.errors.name).to.have.property("message")
                     done()  
                 })
         });
 
         it('should not register without fullfill email field - 400', (done) => {
-            req.body.email = undefined
+            req.body.email = ''
             chai.request(app)
                 .post('/register')
                 .send(req.body)
                 .end((err, res) => {
                     expect(res).to.have.status(400);
-                    expect(res.body).to.have.property("err");
-                    expect(res.body.err).to.have.property("message").eql('User validation failed: email: Email Required');
+                    expect(res.body).to.have.property("errors");
+                    expect(res.body.errors.email).to.have.property("message").eql('Email Required');
                     done()  
                 })
         });
@@ -105,8 +105,8 @@ describe('User Register and Login', () => {
                 .send(req.body)
                 .end((err, res) => {
                     expect(res).to.have.status(400);
-                    expect(res.body).to.have.property("err");
-                    expect(res.body.err).to.have.property("message").eql('User validation failed: password: Password Required');
+                    expect(res.body).to.have.property("errors");
+                    expect(res.body.errors.password).to.have.property("message").eql('Password Required');
                     done()  
                 })
         });
@@ -119,9 +119,10 @@ describe('User Register and Login', () => {
                     .post('/register')
                     .send(req.body)
                     .end((err, res) => {
+                                             
                         expect(res).to.have.status(400);
-                        expect(res.body).to.have.property("err");
-                        expect(res.body.err).to.have.property("message").eql('User validation failed: email: Error, expected email to be unique.');
+                        expect(res.body).to.have.property("errors");
+                        expect(res.body.errors.email).to.have.property("message").eql('Error, expected email to be unique.');
                         done()  
                     })
                 
@@ -194,77 +195,70 @@ describe('User Register and Login', () => {
 describe('Users Listing', () => {
 
     let token = ''
+    let auser = {
+      name: 'user',
+      email: 'user@mail.com',
+      password: helpers.hash('user')
+    }
     let user = {}
     
+    beforeEach(async () => {
+      const response = await chai
+          .request(app)
+          .post('/register')
+          .send(auser);
+      const login = await chai  
+          .request(app)
+          .post('/login')
+          .send({name : 'user', password: 'user'});  
+      console.log('===>',login);
+    })
     
-    describe('GET /users/:id', () => {
-        beforeEach((done) => {
-            UserModel.insertMany({
-                name: 'kosasih',
-                email: 'kosasih@mail.com',
-                password: helpers.hash('kosasih'), 
-            },{
-                name: 'user',
-                email: 'user@mail.com',
-                password: helpers.hash('user'),
-            })
-    
-            chai.request(app)
-                .post('/login')
-                .send({ email : 'kosasih@mail.com', password : 'kosasih' })
-                .end((err, res) => {
-                    token = res.body.token
-                    user = res.body.user
-                    done()
-                })
-        });
-    
-        afterEach((done) => {
-            UserModel.deleteMany({}, err => {
-                done()
-            })
-        });
-
-        it('should get user by headers token and params id', (done) => {
-            chai.request(app)
-                .get(`/users/${user._id}`)
-                .set('token',token)
-                .end((err, res) => {
-                    expect(res).to.have.status(200);
-                    expect(res.body).to.be.a("object");
-                    expect(res.body).to.have.property("_id")
-                    expect(res.body).to.have.property("name")
-                    expect(res.body).to.have.property("email")
-                    done()
-                })
-        });
-    
-        it('should not get user without valid headers token', (done) => {
-            chai.request(app)
-                .get(`/users/${user._id}`)
-                .set('token','1nc0rrectt0k3n')
-                .end((err, res) => {
-                    expect(res).to.have.status(500);
-                    expect(res.body).to.be.a("object");
-                    expect(res.body).to.have.property('message').eql('Invalid User Creditial')
-                    expect(res.body).to.have.property("error");
-                    done()
-                })
-        });
-
-        // it('should not get user without valid params id according to headers token', (done) => {
-        //     chai.request(app)
-        //         .get(`/users/1nc0rrect1D`)
-        //         .set('token',token)
-        //         .end((err, res) => {
-        //             expect(res).to.have.status(500);
-        //             expect(res.body).to.be.a("object");
-        //             expect(res.body).to.have.property('message').eql('you\'re not auhtorized for doing this actions')
-        //             done()
-        //         })
-        // });
-
-    
+    afterEach((done) => {
+        UserModel.deleteMany({}, err => {
+            done()
+        })
     });
 
-});
+      it('should get user by headers token and params id', (done) => {
+          chai.request(app)
+              .get(`/users/${user._id}`)
+              .set('token',token)
+              .end((err, res) => {
+                  expect(res).to.have.status(200);
+                  expect(res.body).to.be.a("object");
+                  expect(res.body).to.have.property("_id")
+                  expect(res.body).to.have.property("name")
+                  expect(res.body).to.have.property("email")
+                  done()
+              })
+      });
+  
+      // it('should not get user without valid headers token', (done) => {
+      //     console.log(user);
+      //     chai.request(app)
+      //         .get(`/users/${user._id}`)
+      //         .set('token','1nc0rrectt0k3n')
+      //         .end((err, res) => {
+      //             expect(res).to.have.status(500);
+      //             expect(res.body).to.be.a("object");
+      //             expect(res.body).to.have.property('message').eql('Invalid User Creditial')
+      //             expect(res.body).to.have.property("error");
+      //             done()
+      //         })
+      // });
+
+      // it('should not get user without valid params id according to headers token', (done) => {
+      //     chai.request(app)
+      //         .get(`/users/1nc0rrect1D`)
+      //         .set('token',token)
+      //         .end((err, res) => {
+      //             expect(res).to.have.status(500);
+      //             expect(res.body).to.be.a("object");
+      //             expect(res.body).to.have.property('message').eql('you\'re not auhtorized for doing this actions')
+      //             done()
+      //         })
+      // });
+
+      
+  });

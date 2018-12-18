@@ -3,6 +3,21 @@ const UserModel = require('../models/UserModel.js');
 const UserMeetingModel = require('../models/UserMeetingModel.js')
 const { setDepartTime,substractMinute } = require('../helpers/helpers')
 module.exports = {
+    feedback(req,res){
+      UserModel.findOneAndUpdate({ _id : req.body.participantId  },{
+        score: req.body.feedbackScore
+      },{})
+        .then(()=>{
+          res.status(200).json({
+            msg: `Score updated`
+          })
+        })
+        .catch((err)=>{
+          res.status(500).json({
+            msg: err
+          })
+        })
+    },
     list(req, res) {
 
         MeetingModel.find()
@@ -58,6 +73,7 @@ module.exports = {
     create(req, res) {
 
         MeetingModel.create({
+            place: req.body.place,
             title : req.body.title,
 			description : req.body.description,
 			host : req.user._id, // from isLogin middleware

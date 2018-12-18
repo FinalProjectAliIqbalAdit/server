@@ -10,7 +10,7 @@ module.exports = {
         if (token) {
             jwt.verify(token, process.env.JWTSECRET, function (err, decoded) {
                 if (!err) {
-                    UserModel.findOne({
+                      UserModel.findOne({
                             _id: decoded._id
                         })
                         .then((user) => {
@@ -19,20 +19,20 @@ module.exports = {
                         })
                         .catch((err) => {
                             res.status(500).json({
-                                message: `Invalid User Creditial`,
+                                message: `Invalid User Credential`,
                                 error : err
                             })
                         })
                 } else {
                     res.status(500).json({
-                        message: `Invalid User Creditial`,
+                        message: `Invalid User Credential`,
                         error : err
                     })
                 }
             })
         } else {
             res.status(500).json({
-                message: `User Creditial Required`
+                message: `User Credential Required`
             })
         }
 

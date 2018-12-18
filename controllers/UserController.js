@@ -21,44 +21,31 @@ const UserController = {
 
     },
 
-    list(req, res) {
-
-        UserModel.find()
-            .select('_id name email lat lng avatar score userMeetings meetingInvitation')
-            .populate('meetingInvitation userMeetings', '_id status title startAt')
-            .exec()
-            .then((users) => {
-                res.status(200).json(users)
-            }).catch((err) => {
-                res.status(500).json({
-                    message: 'Error when getting Users',
-                    error: err
-                });
-            });
-
-
+    async list(req, res) {
+        const users = await UserModel.find()
+        res.status(200).json(users)
     },
 
     findOneById(req, res) {
 
+        
         var id = req.params.id
         UserModel.findById(id)
             .populate('meetingInvitation userMeetings')
+            .populate({
+              path: 'userMeetings',
+              populate: {path: 'host', select: '_id name email'}
+            })
             .exec()
-            .then((user) => {
-                if (!user) {
-                    return res.status(404).json({
-                        message: 'No such User'
-                    });
-                }
+              .then((user) => {
                 return res.status(200).json(user);
-            }).catch((err) => {
+              })
+              .catch((err) => {
                 res.status(500).json({
-                    message: 'Error when getting User.',
+                    message: 'you\'re not auhtorized for doing this actions',
                     error: err
                 });
-            });
-
+              });
     },
 
     register(req, res) {

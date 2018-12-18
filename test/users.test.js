@@ -198,20 +198,21 @@ describe('Users Listing', () => {
     let auser = {
       name: 'user',
       email: 'user@mail.com',
-      password: helpers.hash('user')
+      password: 'user'
     }
     let user = {}
     
     beforeEach(async () => {
-      const response = await chai
+      await chai
           .request(app)
           .post('/register')
           .send(auser);
-      const login = await chai  
+      const response = await chai  
           .request(app)
           .post('/login')
-          .send({name : 'user', password: 'user'});  
-      console.log('===>',login);
+          .send({email : 'user@mail.com', password: 'user'});  
+      token = response.body.token;
+      user = response.body.user;
     })
     
     afterEach((done) => {
@@ -234,31 +235,113 @@ describe('Users Listing', () => {
               })
       });
   
-      // it('should not get user without valid headers token', (done) => {
-      //     console.log(user);
-      //     chai.request(app)
-      //         .get(`/users/${user._id}`)
-      //         .set('token','1nc0rrectt0k3n')
-      //         .end((err, res) => {
-      //             expect(res).to.have.status(500);
-      //             expect(res.body).to.be.a("object");
-      //             expect(res.body).to.have.property('message').eql('Invalid User Creditial')
-      //             expect(res.body).to.have.property("error");
-      //             done()
-      //         })
-      // });
+      it('should not get user without valid headers token', (done) => {
+          chai.request(app)
+              .get(`/users/${user._id}`)
+              .set('token','1nc0rrectt0k3n')
+              .end((err, res) => {
+                  expect(res).to.have.status(500);
+                  expect(res.body).to.be.a("object");
+                  expect(res.body).to.have.property('message').eql('Invalid User Credential')
+                  expect(res.body).to.have.property("error");
+                  done()
+              })
+      });
 
-      // it('should not get user without valid params id according to headers token', (done) => {
-      //     chai.request(app)
-      //         .get(`/users/1nc0rrect1D`)
-      //         .set('token',token)
-      //         .end((err, res) => {
-      //             expect(res).to.have.status(500);
-      //             expect(res.body).to.be.a("object");
-      //             expect(res.body).to.have.property('message').eql('you\'re not auhtorized for doing this actions')
-      //             done()
-      //         })
-      // });
+      it('should not get user without valid params id according to headers token', (done) => {
+          chai.request(app)
+              .get(`/users/1nc0rrect1D`)
+              .set('token',token)
+              .end((err, res) => {
+                  expect(res).to.have.status(500);
+                  expect(res.body).to.be.a("object");
+                  expect(res.body.error).to.be.not.null;
+                  expect(res.body).to.have.property('message').eql('you\'re not auhtorized for doing this actions')
+                  done()
+              })
+      });
+    });
+    
+describe('Testing error',()=>{
 
+    let token = ''
+    let auser = {
+      name: 'user',
+      email: 'user@mail.com',
+      password: 'user'
+    }
+    let user = {}
+    
+    beforeEach(async () => {
+      await chai
+          .request(app)
+          .post('/register')
+          .send(auser);
+      const response = await chai  
+          .request(app)
+          .post('/login')
+          .send({email : 'user@mail.com', password: 'user'});  
+      token = response.body.token;
+      user = response.body.user;
+    })
+    
+    afterEach((done) => {
+        UserModel.deleteMany({}, err => {
+            done()
+        })
+      });
+    it('should have status 204 if delete success ',async ()=>{
+      const response = await chai  
+          .request(app)
+          .delete(`/users/${user._id}`)
+          .set('token',token)
+          .send({email : 'user@mail.com', password: 'user'}); 
       
-  });
+      expect(response).to.have.status(204);
+      expect(response.body).to.be.an("object");
+    })  
+    it('should have status 200 if update success', async ()=>{
+      let newData = {
+        avatar: 'tesupdate',
+        name: 'tesupdate',
+        password: 'tesupdate'
+      }
+      const response = await chai 
+          .request(app)
+          .put(`/users/${user._id}`)
+          .set('token', token)
+          .send(newData)
+        expect(response).to.have.status(200);
+        expect(response.body).to.be.an("object");
+        expect(response.body).to.have.property('message').to.equal('update user success')
+    })
+    it('should return User Credential Required if no credential', async ()=> {
+      let newData = {
+        avatar: 'tesupdate',
+        name: 'tesupdate',
+        password: 'tesupdate'
+      }
+      const response = await chai 
+          .request(app)
+          .put(`/users/${user._id}`)
+          .send(newData)
+        expect(response).to.have.status(500);
+        expect(response.body).to.be.an("object");
+        expect(response.body).to.have.property('message').to.equal('User Credential Required')
+    })  
+    it('should return Invalid User Credential if invalid json token format', async ()=>{
+      let newData = {
+        avatar: 'tesupdate',
+        name: 'tesupdate',
+        password: 'tesupdate'
+      }
+      const response = await chai
+          .request(app)
+          .put(`/users/${user._id}`)
+          .set('token','eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9')
+          .send(newData)
+        expect(response).to.have.status(500);
+        expect(response.body).to.be.an("object");
+        expect(response.body).to.have.property('message').to.equal('Invalid User Credential')  
+    })
+})

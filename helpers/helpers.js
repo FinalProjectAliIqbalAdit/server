@@ -5,7 +5,7 @@ const axios = require('axios');
 const UserMeetingModel = require('../models/UserMeetingModel')
 global.fetch = require('node-fetch');
 // Load the binding (CPU computation)
-require('@tensorflow/tfjs-node')
+// require('@tensorflow/tfjs-node')
 require('dotenv').config()
 module.exports = {
 

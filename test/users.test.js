@@ -132,7 +132,14 @@ describe('User Register and Login', () => {
     });
 
     describe('POST /login ', () => {
-        
+        it('should return error if token expired', async () =>{
+          const response = await chai
+            .request(app)
+            .get('/verify')
+            .set('token','anexpiredtoken')
+          expect(response).to.have.status(401)  
+            
+        })
         it('should sign in user', (done) => {
             req.body.password = helpers.hash(req.body.password)            
             UserModel.create(req.body)
@@ -188,7 +195,6 @@ describe('User Register and Login', () => {
                         })
                 })
         });
-
     });
 });
 

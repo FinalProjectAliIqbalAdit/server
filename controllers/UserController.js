@@ -79,7 +79,7 @@ const UserController = {
 
     },
 
-    login(req, res) {
+   login(req, res) {
 
         UserModel.findOne({
                 email: req.body.email
@@ -104,16 +104,10 @@ const UserController = {
                     })
                 }
             })
-            .catch(err => {
-                res.status(500).json({
-                    message: 'Error when getting User.',
-                    error: err
-                });
-            });
 
     },
 
-    update(req, res) {
+    async update(req, res) {
         const id = req.params.id;
         let updateUser = {
             avatar : req.body.avatar,
@@ -124,18 +118,11 @@ const UserController = {
             updateUser.password = helpers.hash(req.body.password)
         }
         
-        UserModel.findByIdAndUpdate(id, updateUser, { new: true })
-            .then((result) => {
-                res.status(200).json({
-                    message : `update user success`,
-                    data : result
-                })
-            }).catch((err) => {
-                res.status(500).json({
-                    message : 'error when updating user',
-                    error : err
-                })
-            });
+        const result = await UserModel.findByIdAndUpdate(id, updateUser, { new: true })
+        res.status(200).json({
+            message : `update user success`,
+            data : result
+        })
 
     },
 
@@ -143,12 +130,6 @@ const UserController = {
 
         var id = req.params.id;
         UserModel.findByIdAndRemove(id, (err, user) => {
-            if (err) {
-                return res.status(500).json({
-                    message: 'Error when deleting the User.',
-                    error: err
-                });
-            }
             return res.status(204).json();
         });
         

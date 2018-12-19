@@ -15,7 +15,8 @@ module.exports = {
             })
             .catch((err)=>{
                 res.status(500).json({
-                    msg: err
+                    error: err,
+                    message: 'Error when giving feedback'
                 })
             })
     },

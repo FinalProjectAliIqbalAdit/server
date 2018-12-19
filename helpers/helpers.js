@@ -26,6 +26,7 @@ module.exports = {
     compareSync(password, hashedPassword) {
       return bcrypt.compareSync(password, hashedPassword);
     },
+
     getMinute(text){
       var arrDuration = text.split(' ')
       let menitTotal;
@@ -38,12 +39,14 @@ module.exports = {
       }
       return menitTotal
     },
+
     substractMinute(str,minutes){
       var myEndDateTime = new Date(str)
       var MS_PER_MINUTE = 60000;
       var newDate = new Date(myEndDateTime - minutes * MS_PER_MINUTE);
       return newDate
     },
+    
     async setDepartTime(meeting,user){ 
       
       let { data } = await axios.get(`https://maps.googleapis.com/maps/api/distancematrix/json?units=metric&origins=${Number(user.lat)},${Number(user.lng)}&destinations=${Number(meeting.lat)},${Number(meeting.lng)}&departure_time=now&mode=driving&language=id&key=${process.env.API_KEY}`)

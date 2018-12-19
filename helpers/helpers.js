@@ -44,8 +44,9 @@ module.exports = {
       var newDate = new Date(myEndDateTime - minutes * MS_PER_MINUTE);
       return newDate
     },
-    async setDepartTime(meeting,user){   
-      let { data } = await axios.get(`https://maps.googleapis.com/maps/api/distancematrix/json?units=metric&origins=${Number(meeting.lat)},${Number(meeting.lng)}&destinations=${Number(user.lat)},${Number(user.lng)}&departure_time=now&mode=driving&language=id&key=${process.env.API_KEY}`)
+    async setDepartTime(meeting,user){ 
+      
+      let { data } = await axios.get(`https://maps.googleapis.com/maps/api/distancematrix/json?units=metric&origins=${Number(user.lat)},${Number(user.lng)}&destinations=${Number(meeting.lat)},${Number(meeting.lng)}&departure_time=now&mode=driving&language=id&key=${process.env.API_KEY}`)
 
       var arrDistance = data.rows[0].elements[0].distance.text.split(' ')
       var toDot = arrDistance[0].split(',')
@@ -76,13 +77,18 @@ module.exports = {
       }else{
         str = 'pessimistic'
       }
-      
+      console.log('hasil prediksi =====>',str);
       return new Promise((resolve,reject)=>{
         axios.get(`https://maps.googleapis.com/maps/api/distancematrix/json?units=metric&origins=${Number(meeting.lat)},${Number(meeting.lng)}&destinations=${Number(user.lat)},${Number(user.lng)}&traffic_model=${str}&departure_time=now&mode=driving&language=id&key=${process.env.API_KEY}`)
           .then(({ data })=>{
             resolve({
               msg: 'success',
               output: module.exports.getMinute(data.rows[0].elements[0].duration_in_traffic.text)
+            })
+          })
+          .catch((err)=>{
+            reject({
+              msg: ReferenceError
             })
           })
       })

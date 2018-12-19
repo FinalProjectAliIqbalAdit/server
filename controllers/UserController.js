@@ -52,6 +52,8 @@ const UserController = {
             name: req.body.name,
             email: req.body.email,
             password: req.body.password ? helpers.hash(req.body.password) : undefined,
+            lat: req.body.lat ? req.body.lat : undefined,
+            lng: req.body.lng ? req.body.lng : undefined
         }
 
         UserModel.create( newUser )
@@ -59,7 +61,7 @@ const UserController = {
                 let token = helpers.createToken({
                     _id: result._id.toString(),
                     name : result.name,
-                    email : result.email
+                    email : result.email,
                 })
 
                 res.status(201).json({

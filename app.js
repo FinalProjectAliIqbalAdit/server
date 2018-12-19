@@ -11,10 +11,6 @@ var app = express();
 var cors = require('cors')
 // view engine setup
 
-const { onGoing } = require('./helpers/cron');
-
-onGoing();
-
 
 if(process.env.NODE_ENV == 'test') {
     mongoose.connect('mongodb://127.0.0.1:27017/finalProjectTest',{ useNewUrlParser: true, useCreateIndex: true, useFindAndModify : false })    

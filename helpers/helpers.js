@@ -92,6 +92,24 @@ module.exports = {
             })
           })
       })
+    },
+
+    clearMeetingsCollection() {
+        const Meeting = require("../models/MeetingModel.js");
+      
+        return Meeting.deleteMany({});
+    },
+    
+    clearUsersCollection() {
+        const User = require('../models/UserModel.js');
+    
+        return User.deleteMany({});
+    },
+    
+    clearUserMeetingCollection() {
+        const UserMeeting = require('../models/UserMeetingModel.js');
+    
+        return UserMeeting.deleteMany({});
     }
     
 }

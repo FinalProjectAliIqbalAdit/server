@@ -89,23 +89,24 @@ module.exports = {
 			participants : [req.user._id]
         })
         .then((meeting) => {
-            return UserMeetingModel.create({
+            UserMeetingModel.create({
                 meeting: meeting._id,
                 participant: req.user._id,
                 departTime: new Date() // 1jam sblum meeting startAt
             })
-        })
-        .then((userMeeting) => {
-            return UserModel.findByIdAndUpdate(req.user._id, { 
-                $push: { 
-                    userMeetings: userMeeting.meeting
-                } 
+            .then((userMeeting) => {
+                UserModel.findByIdAndUpdate(req.user._id, { 
+                    $push: { 
+                        userMeetings: userMeeting.meeting
+                    } 
+                })
+                .then((result) => {
+                    res.status(201).json({
+                        message : 'Create Meeting Success',
+                        meeting: meeting
+                    });
+                })
             })
-        })
-        .then((user) => {
-            res.status(201).json({
-                message : 'Create Meeting Succes'
-            });
         }).catch((err) => {
             res.status(500).json({
                 message: 'Error when creating Meeting',
@@ -135,7 +136,8 @@ module.exports = {
 			meeting.description = req.body.description ? req.body.description : meeting.description;
 			meeting.host = req.body.host ? req.body.host : meeting.host;
 			meeting.lat = req.body.lat ? req.body.lat : meeting.lat;
-			meeting.lng = req.body.lng ? req.body.lng : meeting.lng;
+            meeting.lng = req.body.lng ? req.body.lng : meeting.lng;
+            meeting.place = req.body.place ? req.body.place : meeting.place;
 			meeting.startAt = req.body.startAt ? req.body.startAt : meeting.startAt;
 			meeting.participants = req.body.participants ? req.body.participants : meeting.participants;
 			meeting.status = req.body.status ? req.body.status : meeting.status;
@@ -165,7 +167,9 @@ module.exports = {
                     error: err
                 });
             }
-            return res.status(204).json();
+            return res.status(200).json({
+                message: 'Successfully deleted meeting'
+            });
         });
 
     },
@@ -186,7 +190,10 @@ module.exports = {
             })
             .catch((err) => {
                 console.log('Get Users To Invite Error: ', err);
-                res.status(500).json(err);
+                res.status(500).json({
+                    error: err,
+                    message: 'Error Getting Uninvited Users'
+                });
             });
 
     },
@@ -254,7 +261,7 @@ module.exports = {
             })
             .then((meeting) => {
                 res.status(200).json({
-                    message : 'Assign meeting succes',
+                    message : 'Assign meeting success',
                     data: meeting
                 })   
             })
@@ -282,7 +289,10 @@ module.exports = {
             })
             .catch((err) => {
                 console.log('Refuse Meeting Invitation Error: ', err);
-                res.status(500).json(err);
+                res.status(500).json({
+                    error: err,
+                    message: 'Error refusing invitation'
+                });
             });
             
     }

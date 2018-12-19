@@ -56,7 +56,7 @@ describe(`token`,()=>{
     expect(result).equal(150)
   })
   it(('Function substractMinute should return date'),()=>{
-    const result = substractMinute("2018-12-21T06:40:09.000Z",9)
+    const result = substractMinute("2018-12-19T13:24:00.000Z",253)
     expect(typeof(result)).equal('object')
   })
 })

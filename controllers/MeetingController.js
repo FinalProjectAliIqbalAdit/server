@@ -239,6 +239,7 @@ module.exports = {
                     let { output } = await setDepartTime(meeting,user)
                     console.log('process ini',output);
                     let departTimeML=substractMinute(String(meeting.startAt),Number(output))
+                    console.log('meeting =>>>>',meeting.startAt,'perginya ===>',new Date(departTimeML));
                     return UserMeetingModel.create({
                         meeting: meetingId,
                         participant: userId,

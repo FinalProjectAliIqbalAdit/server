@@ -217,15 +217,15 @@ module.exports = {
 
         const meetingId = req.params.id
         const userId = req.user._id // from middleware isLogin
-        UserModel.findByIdAndUpdate(userId)
+        console.log(userId);
+        UserModel.findByIdAndUpdate(userId,{ 
+            $push: { userMeetings: meetingId },
+            lat: req.body.lat,
+            lng: req.body.lng,
+            $pull: { meetingInvitation: meetingId}
+         })
             .then((user) => {
-                user.userMeetings.push(meetingId)
-                let index = user.meetingInvitation.indexOf(String(meetingId))
-                user.meetingInvitation.splice(index,1)
-                return user.save()
-            })
-            .then((user) => {
-              
+              console.log('update user ini===>',user);
               return MeetingModel.findByIdAndUpdate(meetingId, { 
                   $push: { 
                       participants: user._id

@@ -17,12 +17,6 @@ module.exports = {
                             req.user = user
                             next()
                         })
-                        .catch((err) => {
-                            res.status(500).json({
-                                message: `Invalid User Credential`,
-                                error : err
-                            })
-                        })
                 } else {
                     res.status(500).json({
                         message: `Invalid User Credential`,
@@ -50,7 +44,7 @@ module.exports = {
                     })
                 } else if (meeting.host.toString() != user._id) {
                     res.status(403).json({
-                        message: `You are not athorized for doing this action`
+                        message: `You are not authorized for doing this action`
                     })
                 } else {
                     req.meeting = meeting

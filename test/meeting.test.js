@@ -15,6 +15,7 @@ chai.use(chaiHttp);
 let token_1;
 let token_2;
 let meetingId;
+let meetingId_2;
 let userId_1;
 let userId_2;
 
@@ -33,6 +34,13 @@ describe('Meeting endpoints tests', function() {
             email: 'zura@mail.com', 
             password: 'zura'
         };
+
+        const meetingData_2 = {
+            title: 'Test Create Meeting 2',
+            description: 'Cannot be late.',
+            startAt: new Date(),
+            place: 'Grand Indonesia'
+        }
 
         await chai
                 .request(app)
@@ -59,6 +67,14 @@ describe('Meeting endpoints tests', function() {
 
         token_2 = response_2.body.token;
         userId_2 = response_2.body.user._id;
+
+        const response_3 = await chai
+                                .request(app)
+                                .post('/meetings')
+                                .set('token', token_1)
+                                .send(meetingData_2);
+
+        meetingId_2 = response_3.body.meeting._id;
     });
 
     after(async function() {
@@ -525,19 +541,7 @@ describe('Meeting endpoints tests', function() {
         });
     });
 
-    describe('GET /meetings/refuse/:id', function() {
-        it('should return an object with a success message and a 200 status code', async function() {
-            const response = await chai
-                                    .request(app)
-                                    .get(`/meetings/refuse/${meetingId}`)
-                                    .set('token', token_2);
-
-            expect(response).to.have.status(200);
-            expect(response).to.be.an('object');
-            expect(response.body).to.have.property('message');
-            expect(response.body.message).to.equal(`Successfully refused the invitation`);
-        });
-
+    describe('GET /meetings/refuse/:id', function() { 
         it('should send an error object with a message and a 500 status code if no token is provided', async function() {
             const response = await chai
                                     .request(app)
@@ -572,19 +576,135 @@ describe('Meeting endpoints tests', function() {
             expect(response.body).to.have.property('message');
             expect(response.body.message).to.equal('Error refusing invitation');
         });
+
+        it('should return an object with a success message and a 200 status code', async function() {
+            const response = await chai
+                                    .request(app)
+                                    .get(`/meetings/refuse/${meetingId}`)
+                                    .set('token', token_2);
+
+            expect(response).to.have.status(200);
+            expect(response).to.be.an('object');
+            expect(response.body).to.have.property('message');
+            expect(response.body.message).to.equal(`Successfully refused the invitation`);
+        });
     });
 
-    // describe('GET /meetings/accept/:id', function() {
-    //     it('should return an object with a success message and a 200 status code', async function() {
-    //         const response = await chai
-    //                                 .request(app)
-    //                                 .get(`/meetings/refuse/${meetingId}`)
-    //                                 .set('token', token_2);
+    describe('GET /meetings/accept/:id', function() {
+        // invite user
+        it('should return an object with a success message and a 200 status code', async function() {
+            const response_invite = await chai
+                                    .request(app)
+                                    .get(`/meetings/invite/${meetingId}/${userId_2}`)
+                                    .set('token', token_1);
 
-    //         expect(response).to.have.status(200);
-    //         expect(response).to.be.an('object');
-    //         expect(response.body).to.have.property('message');
-    //         expect(response.body.message).to.equal(`Successfully refused the invitation`);
-    //     });
-    // });
+            const response_user2 = await chai
+                                    .request(app)
+                                    .get(`/users/${userId_2}`)
+                                    .set('token', token_2);
+
+            expect(response_invite).to.have.status(200);
+            expect(response_invite).to.be.an('object');
+            expect(response_invite.body).to.have.property('message');
+            expect(response_invite.body.message).to.equal(`Meeting invitation send to ${response_user2.body.name}`);
+        });
+
+        it('should send an error object with a message and a 500 status code if meeting _id is wrong', async function () {
+            const response = await chai
+                                    .request(app)
+                                    .post(`/meetings/accept/12345`)
+                                    .set('token', token_2);
+      
+            expect(response).to.have.status(500);
+            expect(response.body).to.be.an('object');
+            expect(response.body).to.have.property('message');
+            expect(response.body.message).to.equal('Error when accepting invitation.');
+        });
+
+        it('should return an object with a success message and a 200 status code', async function() {
+            const response = await chai
+                                    .request(app)
+                                    .post(`/meetings/accept/${meetingId}`)
+                                    .set('token', token_2);
+
+            expect(response).to.have.status(200);
+            expect(response).to.be.an('object');
+            expect(response.body).to.have.property('message');
+            expect(response.body.message).to.equal('Assign meeting success');
+        });
+    });
+
+    describe('PUT /meetings/feedback/:id', function() {
+        it('should send an error object with a message and a 500 status code if meeting _id is wrong', async function () {
+            const response = await chai
+                                    .request(app)
+                                    .put(`/meetings/feedback/12345`)
+                                    .set('token', token_1);
+      
+            expect(response).to.have.status(500);
+            expect(response.body).to.be.an('object');
+            expect(response.body).to.have.property('message');
+            expect(response.body.message).to.equal('Error when getting meeting');
+        });
+
+        it('should send an error object with a message and a 403 status code if user is not the host of the meeting (not authorized)', async function () {
+            const response = await chai
+                                    .request(app)
+                                    .put(`/meetings/feedback/${meetingId_2}`)
+                                    .set('token', token_2);
+      
+            expect(response).to.have.status(403);
+            expect(response.body).to.be.an('object');
+            expect(response.body).to.have.property('message');
+            expect(response.body.message).to.equal('You are not authorized for doing this action');
+        });
+
+        it('should send an error object with a message and a 404 status code if meeting _id is wrong', async function () {
+            const response = await chai
+                                    .request(app)
+                                    .put(`/meetings/feedback/${meetingId}`)
+                                    .set('token', token_2);
+      
+            expect(response).to.have.status(404);
+            expect(response.body).to.be.an('object');
+            expect(response.body).to.have.property('message');
+            expect(response.body.message).to.equal('no such meeting');
+        });
+
+        it('should send an error object with a message and a 500 status code if target user _id is wrong', async function () {
+            const targetFeedback = {
+                participantId: '12345',
+                feedbackScore: 90
+            };
+
+            const response = await chai
+                                    .request(app)
+                                    .put(`/meetings/feedback/${meetingId_2}`)
+                                    .set('token', token_1)
+                                    .send(targetFeedback);
+      
+            expect(response).to.have.status(500);
+            expect(response.body).to.be.an('object');
+            expect(response.body).to.have.property('message');
+            expect(response.body.message).to.equal('Error when giving feedback');
+        });
+
+        it('should return an object with a success message and a 200 status code', async function() {
+            const targetFeedback = {
+                participantId: meetingId_2,
+                feedbackScore: 90
+            };
+
+            const response = await chai
+                                    .request(app)
+                                    .put(`/meetings/feedback/${meetingId_2}`)
+                                    .set('token', token_1)
+                                    .send(targetFeedback);
+
+            expect(response).to.have.status(200);
+            expect(response).to.be.an('object');
+            expect(response.body).to.have.property('msg');
+            expect(response.body.msg).to.equal('Score updated');
+        });
+    });
 }); 

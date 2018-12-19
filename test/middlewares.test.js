@@ -72,6 +72,7 @@ describe('Function setDepartTime testing',async ()=>{
   })
   it('should success if durations longer than 1 hour', async ()=>{
     const result = await setDepartTime({ lat: '-8.253762', lng: '113.725711' },user)
+    console.log('----->',result);
     expect(typeof(result)).equal('object')
     expect(result).to.have.property('msg').equal('success')
     expect(result).to.have.property('output')
